@@ -1,6 +1,6 @@
 <template>
     <header class="sticky top-0 z-50 bg-[#1A1A2A]/95 backdrop-blur-md border-b border-[#2A1A4A]/50 transition-all duration-300">
-        <div class="container mx-auto px-4 py-3">
+        <div class="container-grid py-3">
             <div class="flex items-center justify-between">
                 <div class="flex items-center space-x-6">
                     <h1 class="text-xl font-display font-bold bg-gradient-to-r from-[#FF2CCC] to-[#7A1FFF] bg-clip-text text-transparent hover:scale-105 transition-transform">
@@ -41,9 +41,6 @@
         </div>
     </header>
 </template>
-
-<script setup>
-</script>
 
 <style scoped>
 .font-display {

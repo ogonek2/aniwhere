@@ -1,65 +1,110 @@
-# Laravel + Vue 3 + Vite
+# ANIWHERE - Аніме Форум
 
-Проект создан на Laravel 12 с использованием Vite и Vue 3.
+Laravel проект з Vue 3 та Vite для аніме форуму.
 
-## Установленные технологии
+## Структура бази даних
 
-- **Laravel 12** - последняя версия Laravel
-- **Vue 3** - фреймворк для создания пользовательских интерфейсов
-- **Vite** - современный инструмент сборки
-- **Tailwind CSS** - утилитарный CSS фреймворк
+### Моделі:
+- **Anime** - Аніме з Jikan API
+- **Sprite** - Спрайт (група обговорень), до якого прив'язано кілька аніме
+- **DiscussionGroup** - Група обговорень, прив'язана до спрайта
+- **Discussion** - Окреме обговорення в групі
+
+### Зв'язки:
+- Sprite hasMany Anime (many-to-many через `anime_sprite`)
+- Sprite hasMany DiscussionGroup
+- DiscussionGroup belongsTo Sprite
+- DiscussionGroup hasMany Discussion
+- Discussion belongsTo DiscussionGroup
 
 ## Установка
 
-1. Установите зависимости Composer:
+1. Установите зависимости:
 ```bash
 composer install
-```
-
-2. Установите зависимости npm:
-```bash
 npm install
 ```
 
-3. Скопируйте файл `.env.example` в `.env`:
+2. Настройте `.env` файл:
 ```bash
 cp .env.example .env
-```
-
-4. Сгенерируйте ключ приложения:
-```bash
 php artisan key:generate
 ```
 
-## Запуск
+3. Настройте базу данных в `.env`:
+```
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=aniwhere
+DB_USERNAME=root
+DB_PASSWORD=
+```
 
-1. Запустите сервер разработки Laravel:
+4. Запустите миграции:
 ```bash
+php artisan migrate
+```
+
+5. Получите данные об аниме из Jikan API:
+```bash
+php artisan anime:fetch --limit=100
+```
+
+6. Создайте тестовые спрайты и обсуждения:
+```bash
+php artisan db:seed --class=SpriteSeeder
+```
+
+7. Запустите dev сервер:
+```bash
+npm run dev
 php artisan serve
 ```
 
-2. В другом терминале запустите Vite для разработки:
-```bash
-npm run dev
-```
+## Структура проекта
 
-3. Откройте браузер и перейдите по адресу: `http://localhost:8000`
+### Backend:
+- `app/Models/` - Модели Eloquent
+- `app/Http/Controllers/Api/` - API контроллеры
+- `app/Console/Commands/` - Artisan команды
+- `database/migrations/` - Миграции базы данных
+- `database/seeders/` - Сидеры для тестовых данных
 
-## Структура Vue компонентов
+### Frontend:
+- `resources/js/components/` - Vue компоненты
+- `resources/css/app.css` - Стили Tailwind CSS
 
-Vue компоненты находятся в директории `resources/js/components/`.
+## API Endpoints
 
-Главный компонент приложения: `resources/js/components/App.vue`
+### Anime:
+- `GET /api/anime` - Список аниме
+- `GET /api/anime/{id}` - Конкретное аниме
+- `GET /api/anime/top/{limit}` - Топ аниме
 
-## Сборка для продакшена
+### Sprites:
+- `GET /api/sprites` - Список спрайтов
+- `GET /api/sprites/{id}` - Конкретный спрайт с аниме и группами обсуждений
+- `POST /api/sprites` - Создать новый спрайт
 
-Для сборки статических файлов выполните:
-```bash
-npm run build
-```
+### Discussion Groups:
+- `GET /api/sprites/{spriteId}/discussion-groups` - Группы обсуждений спрайта
+- `GET /api/sprites/{spriteId}/discussion-groups/{groupId}` - Конкретная группа
+- `POST /api/sprites/{spriteId}/discussion-groups` - Создать группу обсуждений
 
-## Дополнительная информация
+### Discussions:
+- `GET /api/discussion-groups/{groupId}/discussions` - Обсуждения в группе
+- `GET /api/discussion-groups/{groupId}/discussions/{discussionId}` - Конкретное обсуждение
+- `POST /api/discussion-groups/{groupId}/discussions` - Создать обсуждение
 
-- Vue 3 использует Composition API с `<script setup>`
-- Vite настроен для работы с Vue через плагин `@vitejs/plugin-vue`
-- Tailwind CSS включен и готов к использованию
+## Команды
+
+- `php artisan anime:fetch --limit=100` - Получить аниме из Jikan API
+- `php artisan db:seed --class=SpriteSeeder` - Создать тестовые спрайты
+
+## Использование
+
+1. После получения аниме из API, создайте спрайты через API или сидер
+2. К каждому спрайту можно привязать несколько аниме
+3. Для каждого спрайта можно создать несколько групп обсуждений
+4. В каждой группе можно создать несколько обсуждений

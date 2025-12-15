@@ -1,6 +1,6 @@
 <template>
     <footer class="bg-[#1A1A2A]/80 backdrop-blur-md border-t border-[#2A1A4A]/50 mt-12 py-8">
-        <div class="container mx-auto px-4">
+        <div class="container-grid">
             <div class="grid md:grid-cols-4 gap-6 mb-6">
                 <div>
                     <h5 class="text-lg font-display font-bold mb-3 bg-gradient-to-r from-[#FF2CCC] to-[#7A1FFF] bg-clip-text text-transparent">
